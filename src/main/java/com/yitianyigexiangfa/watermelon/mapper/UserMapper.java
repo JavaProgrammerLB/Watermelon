@@ -1,10 +1,9 @@
 package com.yitianyigexiangfa.watermelon.mapper;
 
 import com.yitianyigexiangfa.watermelon.entity.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -15,4 +14,14 @@ public interface UserMapper {
 
     @Select("SELECT id, name, email, password FROM user WHERE id = #{id}")
     User findById(long id);
+
+    @Delete("DELETE FROM user WHERE id = #{id}")
+    void deleteById(long id);
+
+    @Update("Update user set name = #{name}, email = #{email}, password = #{password} where id = #{id}")
+    void update(User user);
+
+    @Select("SELECT * FROM user")
+    List<User> getAll();
+
 }
