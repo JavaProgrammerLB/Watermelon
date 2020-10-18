@@ -45,4 +45,9 @@ public class UserService {
         return users;
     }
 
+    public User findByEmailAndPassword(String email, String password) {
+        User user = userMapper.findByEmailAndPassword(email, password);
+        return user;
+    }
+
 }

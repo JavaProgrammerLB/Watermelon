@@ -1,9 +1,11 @@
 package com.yitianyigexiangfa.watermelon.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.yitianyigexiangfa.watermelon.entity.LoginResponse;
 import com.yitianyigexiangfa.watermelon.entity.ResponseDO;
 import com.yitianyigexiangfa.watermelon.entity.User;
 import com.yitianyigexiangfa.watermelon.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +52,23 @@ public class UserController {
     public String getAllUser() {
         List<User> users = userService.getAll();
         return new ResponseDO(true, "Success", users).toString();
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody User user) {
+        String email = user.getEmail();
+        String password = user.getPassword();
+        User result = null;
+        if (StringUtils.isNotBlank(email) && StringUtils.isNotBlank(password)) {
+            result = userService.findByEmailAndPassword(email, password);
+        } else {
+            return new ResponseDO(false, "参数为空", "email和password都不能为空").toString();
+        }
+        if (result != null) {
+            return new ResponseDO(true, "Success", new LoginResponse(true)).toString();
+        } else {
+            return new ResponseDO(false, "用户不存在，或者密码错误", new LoginResponse(false)).toString();
+        }
     }
 
 }
